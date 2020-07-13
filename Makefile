@@ -1,13 +1,7 @@
-all: install start_database start
-
-install:
-	pip3 install -r requirements.txt
+all: start
 
 test:
 	python3 manage.py test
-
-start_database:
-	@docker-compose up -d postgres
 
 # migrate:
 # 	python3 manage.py makemigrations
@@ -18,4 +12,4 @@ start_database:
 # 	echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python3 manage.py shell
 
 start:
-	python3 manage.py runserver
+	@docker-compose up

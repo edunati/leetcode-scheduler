@@ -4,6 +4,8 @@ services:
   postgres:
       image: postgres:10
       container_name: postgres
+      networks:
+        - net
       environment:
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
@@ -13,5 +15,33 @@ services:
       volumes:
           - postgres:/var/lib/postgresql/data
 
+  api:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: api
+    volumes:
+        - .:/code
+    ports:
+        - 8000:8000
+    networks:
+        - net
+    depends_on:
+        - postgres
+        - redis
+    links:
+        - postgres
+        - redis
+        
+  redis:
+    image: redis:4
+    container_name: redis
+    networks:
+        - net
+    ports:
+        - 6379:6379
+
 volumes:
-  postgres:
+    postgres:
+    
+networks:
+    net:
